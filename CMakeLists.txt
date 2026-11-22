@@ -3,7 +3,7 @@ project(screamer C)
 set(CMAKE_C_STANDARD 11)
 
 add_executable(screamer src/main.c src/block.c)
-target_link_libraries(screamer winmm user32 advapi32)
+target_link_libraries(screamer winmm user32 advapi32 m)
 
 add_executable(screamer1 src/screamer.c)
 add_executable(screamer2 src/screamer.c)
